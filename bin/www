@@ -4,10 +4,9 @@
  * Module dependencies.
  */
 
- require('dotenv').config();
- 
+require('dotenv').config();
 const app = require('../app');
-const debug = require('debug')('h:server');
+const debug = require('debug')('albumsphotos:server');
 const http = require('http');
 
 /**
