@@ -19,7 +19,25 @@ const show = async (req, res) => {
     res.send({ status:'success get one album', data:{one_album} });
 }
 
+// POST /
+const store = (req, res) => {
+    res.status(405).send({
+        status: 'fail',
+        message: 'Method not allowed',
+    });
+}
+
+// POST /:albumid
+const update = (req, res) => {
+    res.status(405).send({
+        status: 'fail',
+        message: 'Method not allowed',
+    });
+}
+
 module.exports = {
     index,
     show,
+    update,
+    store,
 }
