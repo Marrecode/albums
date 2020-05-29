@@ -1,17 +1,18 @@
-const models=require('../models');
+const models = require('../models');
 
-// Get /
+
+// Get users/
 const index = async (req, res) => {
-    const all_photos = await models.Photo.fetchAll()
+    const all_users = await models.User.fetchAll()
   
-    res.send({ status: 'success gief me all le photos', data:{all_photos} });
+    res.send({ status: 'success gief me all le users', data:{all_users} });
 }
 
-// Get /:photoid
+// Get /:userid / get the userid with the the connected photo
 const show = async (req, res) => {
-    const one_photo = await new models.Photo({ id: req.params.photoid }).fetch({ withRelated: ['albums', 'users']  });
+    const one_user = await new models.Photo({ id: req.params.usersid }).fetch({ withRelated: ['users']  });
   
-    res.send({ status: 'success, get one photo', data:{one_photo} });
+    res.send({ status: 'success, the user with the photo', data:{one_user} });
 }
 
 // POST /
@@ -29,6 +30,7 @@ const update = (req, res) => {
         message: 'Method not allowed',
     });
 }
+
 
 module.exports = {
     index,

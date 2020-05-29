@@ -11,35 +11,11 @@ const knex = require('knex')({
  
 const bookshelf = require('bookshelf')(knex);
 
-const Photo = bookshelf.model('Photo', {
-    tableName: 'photos',
-    albums() {
-        return this.belongsToMany('Album');
-    },
-    users() {
-        return this.belongsTo('User');
-    },
-});  
+const Photo = require('./Photo')(bookshelf);
 
-const Album = bookshelf.model('Album', {
-    tableName: 'albums',
-    photos() {
-        return this.belongsToMany('Photo'); // albums.photo_id
-    },
-    users() {
-        return this.belongsTo('User');
-    }    
-}); 
+const Album = require('./Album')(bookshelf);
 
-const User = bookshelf.model('User', {  
-    tableName: 'users',
-    albums() {
-        return this.belongsToMany('Album');
-    },
-    photos() {
-        return this.belongsToMany('Photo');
-    }
-});
+const User = require('./User')(bookshelf);
  
 module.exports = {
     bookshelf,

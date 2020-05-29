@@ -38,6 +38,6 @@ const update = (req, res) => {
 module.exports = {
     index,
     show,
-    update,
     store,
+    update,
 }
