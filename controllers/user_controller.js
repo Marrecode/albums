@@ -17,7 +17,6 @@ const show = async (req, res) => {
 
 // POST /
 const store = async (req, res) => {
-    console.log(req.body);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -56,12 +55,50 @@ const store = async (req, res) => {
     });
 }
 
-// POST /:photoid
-const update = (req, res) => {
-       res.status(405).send({
-        status: 'fail',
-        message: 'Method not allowed',
-    });
+
+const update = async (req, res) => {
+    const userId = req.params.usersid;
+
+    const user = await new models.User({ id: userId }).fetch({ require: false});
+    if (!user) {
+        console.log('user update invalid');
+        res.status(404).send({
+            status: 'fail',
+            data: 'user not found',
+        });
+        return;
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('update user req failed validation', errors.array());
+
+        res.status(422).send({
+            status: 'fail',
+            data: errors.array(),
+        });
+        return;
+    }
+
+    const validData = matchedData(req);
+    try {
+        const updateUser = await user.save(validData);
+        console.log('user updated success', updateUser);
+
+        res.send({
+            status: 'success',
+            data: {
+                updateUser,
+            },
+        });
+
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            message: 'error when creating a new user.',
+        })
+        return;
+    }
 }
 
 

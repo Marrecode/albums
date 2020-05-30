@@ -13,6 +13,6 @@ router.get('/:usersid', usersController.show);
 router.post('/', userValidator.createRules, usersController.store);
 
 // Update a specific / 
-router.put('/', userValidator.updateRules, usersController.update);
+router.put('/:usersid', userValidator.updateRules, usersController.update);
 
 module.exports = router;
