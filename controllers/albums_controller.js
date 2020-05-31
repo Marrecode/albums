@@ -1,4 +1,5 @@
 const models=require('../models');
+const {matchedData, validationResult} = require('express-validator');
 
 // Get /
 const index = async (req, res) => {
@@ -11,6 +12,8 @@ const index = async (req, res) => {
       }
     });
   }
+
+
 
 // Get /:albumId
 const show = async (req, res) => {
@@ -27,6 +30,7 @@ const store = (req, res) => {
     });
 }
 
+
 // POST /:albumid
 const update = (req, res) => {
     res.status(405).send({
@@ -35,7 +39,19 @@ const update = (req, res) => {
     });
 }
 
+const addAlbum = async (req, res) => {
+    const result = await Album.photos().attach(photo)
+
+    res.send({
+ 
+        status: 'success',
+        data: `${foto.get('title')} with id ${foto.get('id')} has been attached to ${album.get('title')}`});
+
+    return
+}
+
 module.exports = {
+    addAlbum,
     index,
     show,
     store,
