@@ -21,28 +21,14 @@ const basic = async (req, res, next) => {
     const [username, password] = decodedPayload.split(':');
 
 
-    const user = await new User({ username }).fetch({ require: false });
-   // const user = await new User({ username: username}).fetch({ require: false });
+    const user = await User.login(username, password);
     if (!user) {
         res.status(401).send({
             status: 'fail',
-            data: 'authorizationn required',
-        });
+            data: 'authorization failed'
+        })
         return;
     }
-   
-    const hash = user.get('password');
-    
-    const result = await bcrypt.compare(password, hash);
-
-    if (!result) {
-        res.status(401).send({
-            status: 'fail',
-            data: 'authorization required',
-        });
-        return  
-    }
-    //const user = await new User({ username: username, password: password }).fetch({ require: false });
     req.user = user;
 
     next();

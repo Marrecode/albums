@@ -7,7 +7,7 @@ const ProfileValidator = require('../validation_rules/profile');
 router.get('/', profileController.getProfile);
 
 /* GET / */
-router.get('/albums', profileController.getPhotos);
+router.get('/albums', profileController.getAlbums);
 
 // store new / 
 //router.post('/', profileController.createRules, profileController.store);

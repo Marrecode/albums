@@ -1,6 +1,6 @@
 
 
-
+const bcrypt = require('bcrypt');
 
 module.exports = (bookshelf) => {
     return bookshelf.model('User', {  
@@ -13,5 +13,21 @@ module.exports = (bookshelf) => {
         } 
     }, {
         hashSaltRounds: 10,
+
+        async login(username, password) {
+            const user = await new this({ username }).fetch({
+                require: false });
+                if (!user) {
+                    return false;
+                }
+                
+                const hash = user.get('password');
+
+                const result = await bcrypt.compare(password, hash);
+
+                return (result)
+                ? user
+                : false;
+        },
     });
-}
+};

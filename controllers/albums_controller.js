@@ -17,7 +17,7 @@ const index = async (req, res) => {
 
 // Get /:albumId
 const show = async (req, res) => {
-    const one_album = await new models.Album({ id: req.params.albumid }).fetch({ withRelated: ['photos', 'users'] });
+    const one_album = await new models.Album({ id: req.params.albumid }).fetch({ withRelated: ['photos'] });
 
     res.send({ status:'success get one album', data:{one_album} });
 }
