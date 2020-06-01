@@ -62,13 +62,8 @@ const store = async (req, res) => {
             status: 'error',
             message: 'error when creating a new user.',
         })
-        return;
+        throw error;
     }
-
-    res.status(405).send({
-        status: 'fail',
-        message: 'Method not allowed',
-    });
 }
 
 
@@ -86,6 +81,8 @@ const update = async (req, res) => {
     }
 
     const errors = validationResult(req);
+
+    const validData = matchedData(req);
     if (!errors.isEmpty()) {
         console.log('update user req failed validation', errors.array());
 
@@ -96,7 +93,7 @@ const update = async (req, res) => {
         return;
     }
 
-    const validData = matchedData(req);
+   
     try {
         const updateUser = await user.save(validData);
         console.log('user updated success', updateUser);

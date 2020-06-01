@@ -1,6 +1,5 @@
-
-const { User } = require('../../models');
 const bcrypt = require('bcrypt');
+const { User } = require('../../models');
 
 const basic = async (req, res, next) => {
     if (!req.headers.authorization) {
@@ -17,31 +16,33 @@ const basic = async (req, res, next) => {
         next();
     }
 
-    const decodedPayload = new Buffer(base64payload, 'base64').toString('ascii');
+    const decodedPayload = new Buffer.from(base64payload, 'base64').toString('ascii');
 
     const [username, password] = decodedPayload.split(':');
 
-    const user = await new User({ username: username}).fetch({ require: false });
+
+    const user = await new User({ username }).fetch({ require: false });
+   // const user = await new User({ username: username}).fetch({ require: false });
     if (!user) {
         res.status(401).send({
             status: 'fail',
-            data: 'authorization required',
+            data: 'authorizationn required',
         });
         return;
     }
-    
+   
     const hash = user.get('password');
-
+    
     const result = await bcrypt.compare(password, hash);
 
-    if (result) {
+    if (!result) {
         res.status(401).send({
             status: 'fail',
             data: 'authorization required',
         });
-        return;
+        return  
     }
-
+    //const user = await new User({ username: username, password: password }).fetch({ require: false });
     req.user = user;
 
     next();
