@@ -10,6 +10,8 @@ module.exports = (bookshelf) => {
         },
         photos() {
             return this.belongsToMany('Photo');
-        }
+        } 
+    }, {
+        hashSaltRounds: 10,
     });
 }
