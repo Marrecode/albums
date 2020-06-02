@@ -8,6 +8,11 @@ module.exports = (bookshelf) => {
         },
         users() {
             return this.belongsTo('User');
-        }    
+        }}, {
+            fetchById(id, fetchOptions = {}) {
+                return new this({ id }).fetch(fetchOptions);
+            }
     }); 
 }
+
+

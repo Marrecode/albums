@@ -12,8 +12,6 @@ const index = async (req, res) => {
 
 // Get /:userid / get the userid with the the connected photo
 const show = async (req, res) => {
-    //const one_user = await new models.User({ id: req.params.usersid }).fetch({ withRelated: ['users']  });
-    // get the user with the photoid
     const one_user = await new models.User({ id: req.params.usersid }).fetch();
     res.send({ status: 'success, the user with the photo', data:{one_user} });
 }

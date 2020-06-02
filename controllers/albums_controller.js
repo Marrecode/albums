@@ -1,5 +1,6 @@
 const models=require('../models');
 const {matchedData, validationResult} = require('express-validator');
+const { Album, Photo } = require('../models');
 
 // Get /
 const index = async (req, res) => {
@@ -23,11 +24,37 @@ const show = async (req, res) => {
 }
 
 // POST /
-const store = (req, res) => {
-    res.status(405).send({
-        status: 'fail',
-        message: 'Method not allowed',
-    });
+const store = async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('create album title req failed validation', errors.array());
+        res.status(422).send({
+            status: 'fail',
+            data: errors.array,
+        });
+        return;
+    }
+
+    const valid = matchedData(req)
+
+    try {
+        const album = await new Album(valid).save();
+        console.log('created new photo', album);
+
+        res.send({
+            status: 'success',
+            data: {
+                album,
+            },
+        });
+    } catch (error) {
+        res.status(500).send({
+            status: 'error',
+            message: 'exception thrown in database when trying to create'
+        });
+        throw error;
+    }
 }
 
 
@@ -40,14 +67,40 @@ const update = (req, res) => {
 }
 
 const addAlbum = async (req, res) => {
-    const result = await Album.photos().attach(photo)
+   // req.body.album_id
+       /* const Photo = await new models.Album.fetchById(req.body.albumid);
 
-    res.send({
- 
-        status: 'success',
-        data: `${foto.get('title')} with id ${foto.get('id')} has been attached to ${album.get('title')}`});
+        album = await models.Album.fetchById(req.album.data.id);
+        const res = await Album.photos().attach(Photo);
+*/  
+        const error = validationResult(req);
+        if (!error.isEmpty()) {
+            res.status(422).send({
+                status: 'fail',
+                data: error.array()
+            })
+            return;
+        }
+        try {
+        const photo = await Photo.fetchById(req.body.photo_id);
+        const album = await Album.fetchById(req.params.albumid);
+        console.log(album);
+        const photoToAlbum = await album.photos().attach([photo]);
 
-    return
+       //const result = await album.photos().attach(photo);
+
+        res.status(201).send({
+            status: 'success',
+            data: photoToAlbum,
+        });
+
+    } catch (err) {
+        res.status(500).send({
+        status: 'error',
+        message: 'error when trying to add photo to album'
+        });
+        throw error;
+    }
 }
 
 module.exports = {
