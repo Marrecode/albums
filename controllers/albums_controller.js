@@ -66,13 +66,9 @@ const update = (req, res) => {
     });
 }
 
+// POST / albums/albums/albumid/photos
 const addAlbum = async (req, res) => {
-   // req.body.album_id
-       /* const Photo = await new models.Album.fetchById(req.body.albumid);
-
-        album = await models.Album.fetchById(req.album.data.id);
-        const res = await Album.photos().attach(Photo);
-*/  
+   
         const error = validationResult(req);
         if (!error.isEmpty()) {
             res.status(422).send({
@@ -84,10 +80,8 @@ const addAlbum = async (req, res) => {
         try {
         const photo = await Photo.fetchById(req.body.photo_id);
         const album = await Album.fetchById(req.params.albumid);
-        console.log(album);
+        
         const photoToAlbum = await album.photos().attach([photo]);
-
-       //const result = await album.photos().attach(photo);
 
         res.status(201).send({
             status: 'success',

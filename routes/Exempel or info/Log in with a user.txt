@@ -1,0 +1,41 @@
+
+
+http://localhost:3000/profile/photos     / With Auth
+{
+                
+  "email": "Johan123",
+  "password": "123",
+  "first_name": "Johan",
+  "last_name": "coder",
+  "username": "johan"
+}
+
+GET
+[
+  http://localhost:3000/photos/photos/
+  http://localhost:3000/register/
+  http://localhost:3000/albums/albums/
+  http://localhost:3000/profile/photos
+]
+
+POST 
+[
+  http://localhost:3000/register
+  http://localhost:3000/albums/albums/
+  http://localhost:3000/albums/albums/5/photos
+  http://localhost:3000/photos/photos
+]
+
+PUT
+[
+  http://localhost:3000/register/14
+]
+
+router.use('/register', require('../users'));
+router.use('/photos', require('../photos'));
+router.use('/albums', require('../albums'));
+router.use(auth.basic);
+
+router.use('/profile', require('../profile'));
+
+
