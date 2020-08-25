@@ -6,5 +6,5 @@ const ProfileValidator = require('../validation_rules/profile');
 
 router.get('/', profileController.getProfile);
 
-
+//
 module.exports = router;
