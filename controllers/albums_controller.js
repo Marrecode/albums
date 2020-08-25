@@ -4,23 +4,38 @@ const { Album, Photo } = require('../models');
 
 // Get /
 const index = async (req, res) => {
-    const all_albums = await models.Album.fetchAll();
-  
+    try {
+        const all_albums = await models.Album.fetchAll();
+    
     res.send({ 
-      status: 'succes give me all le albums',
+      status: 'succes',
       data: {
         albums: all_albums
       }
     });
-  }
+}   catch (err) {
+        res.status(404).send({
+            status: 'fail',
+            message: 'resource not found',
+        })
+    }
+}
 
 
-
-// Get /:albumId
+// Get /:albumid
 const show = async (req, res) => {
-    const one_album = await new models.Album({ id: req.params.albumid }).fetch({ withRelated: ['photos'] });
+    try {
+        const one_album = await new models.Album({ id: req.params.albumid }).fetch({ withRelated: ['photos'] });
 
-    res.send({ status:'success get one album', data:{one_album} });
+        res.send({ status:'success', 
+        data: {one_album} });
+
+}   catch (err) {
+        res.status(404).send({
+            status: 'fail',
+            data: 'resource not found'
+        })
+    }
 }
 
 // POST /
@@ -80,7 +95,6 @@ const addAlbum = async (req, res) => {
         try {
         const photo = await Photo.fetchById(req.body.photo_id);
         const album = await Album.fetchById(req.params.albumid);
-        
         const photoToAlbum = await album.photos().attach([photo]);
 
         res.status(201).send({

@@ -6,8 +6,5 @@ const ProfileValidator = require('../validation_rules/profile');
 
 router.get('/', profileController.getProfile);
 
-/* GET The User with the photo/ */
-router.get('/photos', profileController.getPhoto);
-
 
 module.exports = router;

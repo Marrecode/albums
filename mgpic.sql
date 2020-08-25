@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost
--- Tid vid skapande: 02 jun 2020 kl 15:33
+-- Tid vid skapande: 25 aug 2020 kl 18:20
 -- Serverversion: 8.0.18
 -- PHP-version: 7.3.11
 
@@ -30,22 +30,29 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `albums` (
   `id` int(11) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumpning av Data i tabell `albums`
 --
 
-INSERT INTO `albums` (`id`, `title`) VALUES
-(1, 'albert'),
-(2, 'hejsve'),
-(3, 'metallica'),
-(4, 'kungen'),
-(5, 'tv'),
-(6, 'jul'),
-(7, 'hejhejhejhej'),
-(8, 'hejsvennebannan');
+INSERT INTO `albums` (`id`, `title`, `user_id`) VALUES
+(1, 'albert', 3),
+(2, 'hejsve', 3),
+(3, 'metallica', 12),
+(4, 'kungen', 3),
+(5, 'tv', 4),
+(6, 'jul', 2),
+(7, 'hejhejhejhej', 1),
+(8, 'hejsvennebannan', 2),
+(9, 'hejsvennebannan', 12),
+(10, 'hl3', 2),
+(11, 'hl3', 2),
+(12, 'hl3', 2),
+(13, 'hehehe', 4),
+(14, 'hehehe', 29);
 
 -- --------------------------------------------------------
 
@@ -72,7 +79,13 @@ INSERT INTO `albums_photos` (`album_id`, `photo_id`) VALUES
 (2, 1),
 (2, 5),
 (2, 7),
-(5, 3);
+(5, 3),
+(5, 3),
+(5, 3),
+(5, 3),
+(5, 6),
+(5, 6),
+(5, 8);
 
 -- --------------------------------------------------------
 
@@ -85,7 +98,6 @@ CREATE TABLE `photos` (
   `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `comment` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `album_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -93,45 +105,21 @@ CREATE TABLE `photos` (
 -- Dumpning av Data i tabell `photos`
 --
 
-INSERT INTO `photos` (`id`, `title`, `url`, `comment`, `album_id`, `user_id`) VALUES
-(1, 'dePhoto', 'www.hejsvejs', 'fint', 2, 3),
-(2, 'svan', 'www.svanbild.jpg', 'finbild', 1, 1),
-(3, 'dog', 'www.dogatm.se', 'dog', 2, 2),
-(4, 'pippi', 'www.legspla-jpg', 'nice', 2, 13),
-(5, 'katt', 'katt.jpg', 'lol', 4, 13),
-(6, 'hejhej', 'www.hejsvejs', 'fint', 20, 2),
-(7, 'Mysta', 'mysta.jpg', 'baddie', 15, 3),
-(8, 'Mysta', 'mysta.jpg', 'baddie', 15, 3);
-
--- --------------------------------------------------------
-
---
--- Tabellstruktur `photos_users`
---
-
-CREATE TABLE `photos_users` (
-  `user_id` int(11) NOT NULL,
-  `photo_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumpning av Data i tabell `photos_users`
---
-
-INSERT INTO `photos_users` (`user_id`, `photo_id`) VALUES
-(1, 1),
-(2, 3),
-(2, 2),
-(13, 2),
-(11, 3),
-(13, 1),
-(12, 1),
-(20, 3),
-(20, 5),
-(20, 5),
-(19, 4),
-(18, 2),
-(16, 5);
+INSERT INTO `photos` (`id`, `title`, `url`, `comment`, `user_id`) VALUES
+(1, 'dePhoto', 'www.hejsvejs', 'fint', 3),
+(2, 'svan', 'www.svanbild.jpg', 'finbild', 1),
+(3, 'dog', 'www.dogatm.se', 'dog', 2),
+(4, 'pippi', 'www.legspla-jpg', 'nice', 13),
+(5, 'katt', 'katt.jpg', 'lol', 13),
+(6, 'hejhej', 'www.hejsvejs', 'fint', 2),
+(7, 'Mysta', 'mysta.jpg', 'baddie', 3),
+(8, 'Mysta', 'mysta.jpg', 'baddie', 3),
+(9, 'Mysta', 'mysta.jpg', 'baddie', 3),
+(10, 'Mysta', 'mysta.jpg', 'baddie', 3),
+(11, 'Mystan', 'mysta.jpg', 'baddie', 3),
+(12, 'Mystan', 'mysta.jpg', 'baddie', 3),
+(13, 'Mystan', 'mysta.jpg', 'baddie', 3),
+(14, 'kalleAnkas', 'www.imgbild', 'badde', 5);
 
 -- --------------------------------------------------------
 
@@ -144,28 +132,38 @@ CREATE TABLE `users` (
   `email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `first_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+  `last_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumpning av Data i tabell `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`, `username`) VALUES
-(1, 'yallyalla@hotmail.com', '202cb962ac59075b964b07152d234b70', 'emil', 'hest', 'hej'),
-(8, 'goodemailyesds123', '$2b$10$5SYLJrdxGV0f2U8ML/U85e0E93mZEUjxu5GkxePU5.bwR1Xof3h6O', 'kallesve', 'hejsvensson', 'hejsan'),
-(9, 'myemail', '$2b$10$TQaRCtU270VpaZsZEMwEyumIoX.7.6IqU/2F85ab1DkqPyI4u4DgC', 'peter', 'hejs', 'hejsan'),
-(10, 'myemail1', '$2b$10$rMb1x4sVq/6YJpEd80Ls6epssayigLzAfynI2YtTVYhRLu/wO80Hu', 'peter', 'hejs', 'hejsan'),
-(11, 'email123', '$2b$10$z1tZfNANZ3hvMMwkSKJdZuNgdgBrlMaQL/cPI3DhBFP9Q7vKt.LZe', 'peter', 'hejs', 'hejsan1'),
-(12, 'emailmartin', '$2b$10$zCwUZW5VgzO284MbFHTcAuw1WSE4qBjIUE56xk2boPiCnk010ZZSW', 'peter', 'hejs', 'hejsan1'),
-(15, 'emaiin', '$2b$10$wN7CQPGiWzFwJdausoreU.86WYAXcNtL4TGjj7NgSA8dmkO2HJTUu', 'peter', 'hejs', 'lol'),
-(16, 'em4a', '$2b$10$nb.bW7ci1ZPznwe2qrkI/.pye5nURAeYPHfhSlGMuLvrF51PmnbY2', 'peater', 'hejs', 'lol'),
-(17, 'emsdada', '$2b$10$CCPO9K1/A5qmLPUuS6GCdO0lW8oW8/LTpWmYcwgkO4/CXrmAOwDeO', 'peater', 'hejs', 'lola'),
-(18, 'lolol', '$2b$10$VnHFB6/RJrig2ZkLzadH/egfKWlSQPfeCoj6vYkOFRhfZ80aMYr/C', 'peatesdr', 'hejs', '123'),
-(19, 'loolol', '$2b$10$jolg1njhTkCUI0EGIU7Q9.NJt95pPRqj9fyk6sb7pxuyUbuaog/Xe', 'anna-lisa', 'anna-lista', 'annalisa'),
-(20, 'Johan123', '$2b$10$XF7Qhbnsz6/kDKDo8zOxd.sjF1S/fh4nIFuS7cQdvJkbZGjYAv3qG', 'Johan', 'coder', 'johan'),
-(21, 'J3asd1', '$2b$10$Q97KMuR0YNzrvY.b1enh3OxGNwAQQkL8mj/Ww2RLYZn8KD8nouRlu', 'Jo32n', 'coder', 'johan');
+INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`) VALUES
+(1, 'yallyalla@hotmail.com', '202cb962ac59075b964b07152d234b70', 'emil', 'hest'),
+(8, 'goodemailyesds123', '$2b$10$5SYLJrdxGV0f2U8ML/U85e0E93mZEUjxu5GkxePU5.bwR1Xof3h6O', 'kallesve', 'hejsvensson'),
+(9, 'myemail', '$2b$10$TQaRCtU270VpaZsZEMwEyumIoX.7.6IqU/2F85ab1DkqPyI4u4DgC', 'peter', 'hejs'),
+(10, 'myemail1', '$2b$10$rMb1x4sVq/6YJpEd80Ls6epssayigLzAfynI2YtTVYhRLu/wO80Hu', 'peter', 'hejs'),
+(11, 'email123', '$2b$10$z1tZfNANZ3hvMMwkSKJdZuNgdgBrlMaQL/cPI3DhBFP9Q7vKt.LZe', 'peter', 'hejs'),
+(12, 'emailmartin', '$2b$10$zCwUZW5VgzO284MbFHTcAuw1WSE4qBjIUE56xk2boPiCnk010ZZSW', 'peter', 'hejs'),
+(15, 'emaiin', '$2b$10$wN7CQPGiWzFwJdausoreU.86WYAXcNtL4TGjj7NgSA8dmkO2HJTUu', 'peter', 'hejs'),
+(16, 'em4a', '$2b$10$nb.bW7ci1ZPznwe2qrkI/.pye5nURAeYPHfhSlGMuLvrF51PmnbY2', 'peater', 'hejs'),
+(17, 'emsdada', '$2b$10$CCPO9K1/A5qmLPUuS6GCdO0lW8oW8/LTpWmYcwgkO4/CXrmAOwDeO', 'peater', 'hejs'),
+(18, 'lolol', '$2b$10$VnHFB6/RJrig2ZkLzadH/egfKWlSQPfeCoj6vYkOFRhfZ80aMYr/C', 'peatesdr', 'hejs'),
+(19, 'loolol', '$2b$10$jolg1njhTkCUI0EGIU7Q9.NJt95pPRqj9fyk6sb7pxuyUbuaog/Xe', 'anna-lisa', 'anna-lista'),
+(20, 'Johan123', '$2b$10$XF7Qhbnsz6/kDKDo8zOxd.sjF1S/fh4nIFuS7cQdvJkbZGjYAv3qG', 'Johan', 'coder'),
+(21, 'J3asd1', '$2b$10$Q97KMuR0YNzrvY.b1enh3OxGNwAQQkL8mj/Ww2RLYZn8KD8nouRlu', 'Jo32n', 'coder'),
+(22, 'MartinGustavsson', '$2b$10$nQVaCh.YArC861v5gQoyfe8mX.hBNz0rqPq9eA0hl8dwXFKhdyn1u', 'Martin', 'Gustavsson'),
+(23, 'MartinGustavssoncool', '$2b$10$uDoeBowjTzwITPrcSfFfl.Gwit8BUGNp7jTN4Sw5seHUXb.uMWKUG', 'Martina', 'Gustaaavsson'),
+(24, 'MartinGustavssoncoodsfsdfl', '$2b$10$orHY6SP1StYsn5THrws6weQWqlfDWYT/yawwDr6n7t86QT7Rv0dl.', 'Martina', 'Gustaaavsson'),
+(25, 'gustavsson__M@hotmail.com', '$2b$10$BLuBrcLtwTAr6iwKYHF2e.u2FFbX38qNNSJxCPxBiMZ1AtEskgxYu', 'Martina', 'Gustaaavsson'),
+(26, 'gustavsson@hotmail.com', '$2b$10$QRFoP/Svio/a9DCoi4SpNeQE8Ewg.SwkikJRHsfq72H0n4P0t2NCu', 'Martina', 'Gustaaavsson'),
+(27, 'gustav', '$2b$10$iR2uwTkUjHrs.OSFK3cG7O49pihfQHNlgFdhjxxgJkSk3SnD2b4I.', 'Marti', 'Gusavsson'),
+(28, 'marre', '$2b$10$Ya0Z9IrgQJBrOOVFc3bWqOJp1eZVxhN.rHJ.zXqPRZVxD4q8.5uHa', 'Martii', 'Gusavssaon'),
+(29, 'marree', '$2b$10$SXIKqU/eI5wOvA8qKqPoPuHNa2dozQzP4rMQzJND35KM1H3FThmEa', 'Martii', 'Gusavssaon'),
+(30, 'martins', '$2b$10$2o3ix2SoDWI76VDTZB7oz.XO24n1UKpvkfE7XWFn3O1LHobc6itzy', 'Martii', 'Gusavssaon'),
+(31, 'gustavs', '$2b$10$YNdho46cLMQG7YSJtx5VCe.IAXbUziyhf20S4bTGlV5hckJ377MHK', 'Martii', 'Gusavssaon'),
+(32, 'gust', '$2b$10$Zx2X/swmbH3kaJ7i89USKOOEprE3QWWpIml0GjYSEc2Eio0GvTxw6', 'Mohoha', 'Gusavssaon');
 
 --
 -- Index för dumpade tabeller
@@ -197,19 +195,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT för tabell `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT för tabell `photos`
 --
 ALTER TABLE `photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT för tabell `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

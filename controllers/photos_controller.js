@@ -1,20 +1,36 @@
 const models=require('../models');
 const { matchedData,validationResult} = require('express-validator');
 const { Photo }=require('../models');
+const photo = require('../validation_rules/photo');
 
 // Get /
 const index = async (req, res) => {
+    try {
     const all_photos = await models.Photo.fetchAll()
-  
-    res.send({ status: 'success gief me all le photos', data:{all_photos} });
-}
+        res.send({ status: 'success', 
+            data:{all_photos} });
+    } catch (err) {
+        res.status(404).send({
+            status: 'fail',
+            data: 'not available'
+        })
+    }
+};
+
 
 // Get /:photoid
 const show = async (req, res) => {
-    const one_photo = await new models.Photo({ id: req.params.photoid }).fetch({ withRelated: ['albums', 'users']  });
-  
-    res.send({ status: 'success, get one photo', data:{one_photo} });
-}
+    try {
+        const one_photo = await new models.Photo({ id: req.params.photoid }).fetch({ withRelated: ['albums', 'users']  });
+        res.send({ status: 'success', 
+            data: {one_photo} });
+    } catch (err) {
+        res.status(404).send({
+            status: 'fail',
+            data: 'no photos available'
+        });
+    }
+};
 
 // POST /
 const store = async (req, res) => {
@@ -27,7 +43,7 @@ const store = async (req, res) => {
             data: errors.array,
         });
         return;
-    }
+    };
 
     const valid = matchedData(req)
 
@@ -48,12 +64,9 @@ const store = async (req, res) => {
         });
         throw error;
     }
-}
- /*   res.status(405).send({
-        status: 'fail',
-        message: 'Method not allowed',
-    });
-    /*/
+};
+
+    
 
 
 // POST /:photoid
@@ -62,7 +75,7 @@ const update = (req, res) => {
         status: 'fail',
         message: 'Method not allowed',
     });
-}
+};
 
 module.exports = {
     index,

@@ -18,9 +18,8 @@ module.exports = (bookshelf) => {
             return new this({ id }).fetch(fetchOptions);
         },
 
-        async login(username, password) {
-            const user = await new this({ username }).fetch({
-                require: false });
+        async login(email, password) {
+            const user = await new this({ email }).fetch({ require: false });
                 if (!user) {
                     return false;
                 }
@@ -32,6 +31,6 @@ module.exports = (bookshelf) => {
                 return (result)
                 ? user
                 : false;
-        },
-    });
+        }
+    })
 };

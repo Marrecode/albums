@@ -4,19 +4,20 @@ const albumsController = require('../controllers/albums_controller');
 const albumvalidation = require('../validation_rules/album');
 
 // Get all
-router.get('/albums', albumsController.index);
+router.get('/', albumsController.index);
 
 //* GET a specific/
-router.get('/albums/:albumid', albumsController.show);
+router.get('/:albumid', albumsController.show);
 
 // store new / 
-router.post('/albums', albumvalidation.createRules, albumsController.store);
+router.post('/', albumvalidation.createRules, albumsController.store);
 
 //Add a photo to Album
-router.post('/albums/:albumid/photos', albumvalidation.addPhoto, albumsController.addAlbum);
+//http://localhost:3000/albums/albums/2/photos
+router.post('/:albumid/photos', albumvalidation.addPhoto, albumsController.addAlbum);
 
 // Update a specific / 
-router.put('/albums/:albumid', albumsController.update);
+router.put('/:albumid', albumsController.update);
 
 
 
