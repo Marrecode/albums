@@ -5,7 +5,7 @@ const models = require('../models');
 const createRules = [body('title').isLength({ min: 3 }),
     body('url').isLength({ min: 2 }),
     body('comment').optional().isLength({ min: 2 }),
-    body('user_id').optional().isLength({ min: 1 }),]
+    ]
 
     const updateRules = [
         body("password")

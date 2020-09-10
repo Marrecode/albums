@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Värd: localhost
--- Tid vid skapande: 25 aug 2020 kl 18:20
+-- Tid vid skapande: 10 sep 2020 kl 21:30
 -- Serverversion: 8.0.18
 -- PHP-version: 7.3.11
 
@@ -52,7 +52,10 @@ INSERT INTO `albums` (`id`, `title`, `user_id`) VALUES
 (11, 'hl3', 2),
 (12, 'hl3', 2),
 (13, 'hehehe', 4),
-(14, 'hehehe', 29);
+(14, 'hehehe', 29),
+(15, 'dayum', 29),
+(16, 'imback', 29),
+(17, 'imback', 29);
 
 -- --------------------------------------------------------
 
@@ -119,7 +122,17 @@ INSERT INTO `photos` (`id`, `title`, `url`, `comment`, `user_id`) VALUES
 (11, 'Mystan', 'mysta.jpg', 'baddie', 3),
 (12, 'Mystan', 'mysta.jpg', 'baddie', 3),
 (13, 'Mystan', 'mysta.jpg', 'baddie', 3),
-(14, 'kalleAnkas', 'www.imgbild', 'badde', 5);
+(14, 'kalleAnkas', 'www.imgbild', 'badde', 5),
+(15, 'kalleAnkas', 'www.imgbild', 'badde', 5),
+(16, 'kallee', 'www.imgbild', 'hello', 3),
+(17, 'kallee', 'www.imgbild', 'hello', 29),
+(18, 'works', 'img', 'doit', 29),
+(19, 'works', 'img', 'doit', 29),
+(20, 'works', 'img', 'doit', 29),
+(21, 'test', 'imga', 'hello', 29),
+(22, 'kallesmagasin', 'imgpic', 'kajsa', 29),
+(23, 'kajsa', 'imlol', 'henrik', 29),
+(24, 'kajsa', 'imlol', 'henrik', 29);
 
 -- --------------------------------------------------------
 
@@ -195,13 +208,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT för tabell `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT för tabell `photos`
 --
 ALTER TABLE `photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT för tabell `users`

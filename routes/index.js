@@ -4,7 +4,7 @@ const auth = require('../controllers/middlewawres/auth');
 
 /* GET / */
 router.get('/', (req, res) => {
-  res.send({ status: 'success' });
+  res.send({ status: 'success123' });
 });
 
 

@@ -2,41 +2,49 @@ const models=require('../models');
 const {matchedData, validationResult} = require('express-validator');
 const { Album, Photo } = require('../models');
 
-// Get /
+
+
 const index = async (req, res) => {
+    console.log(req.user.id);
+  
     try {
-        const all_albums = await models.Album.fetchAll();
-    
-    res.send({ 
-      status: 'succes',
-      data: {
-        albums: all_albums
-      }
-    });
-}   catch (err) {
-        res.status(404).send({
-            status: 'fail',
-            message: 'resource not found',
-        })
+      const user = await new models.User({ id: req.user.id }).fetch({
+        withRelated: "albums"
+      });
+  
+      // const albums = await models.Album.fetchAll();
+      const all_albums = user.related("albums");
+      console.log(all_albums);
+  
+      res.send({ status: "success", data: { all_albums } });
+    } catch (err) {
+      res.status(404).send({
+        status: "fail",
+        data: "resource not founde"
+      });
     }
-}
+};
+// Get /
+
 
 
 // Get /:albumid
 const show = async (req, res) => {
     try {
-        const one_album = await new models.Album({ id: req.params.albumid }).fetch({ withRelated: ['photos'] });
-
-        res.send({ status:'success', 
-        data: {one_album} });
-
-}   catch (err) {
+      const album = await new models.Album({
+        id: req.params.id,
+        user_id: req.user.id
+      }).fetch({ withRelated: ["photos"] });
+      res.send({ 
+          status: "success", 
+          data: { album } });
+    } catch (err) {
         res.status(404).send({
-            status: 'fail',
-            data: 'resource not found'
-        })
+            status: "fail",
+            data: "resource not found"
+      });
     }
-}
+  };
 
 // POST /
 const store = async (req, res) => {
@@ -52,7 +60,7 @@ const store = async (req, res) => {
     }
 
     const valid = matchedData(req)
-
+    valid.user_id = req.user.id;
     try {
         const album = await new Album(valid).save();
         console.log('created new photo', album);

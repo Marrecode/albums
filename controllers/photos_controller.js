@@ -1,36 +1,46 @@
 const models=require('../models');
 const { matchedData,validationResult} = require('express-validator');
-const { Photo }=require('../models');
-const photo = require('../validation_rules/photo');
+const { Photo, User } = require('../models');
+
 
 // Get /
 const index = async (req, res) => {
     try {
-    const all_photos = await models.Photo.fetchAll()
-        res.send({ status: 'success', 
-            data:{all_photos} });
-    } catch (err) {
-        res.status(404).send({
-            status: 'fail',
-            data: 'not available'
-        })
-    }
-};
+        // const all_photos = await models.Album.fetchAll();
+        const user = await new models.User({ id: req.user.id }).fetch({
+          withRelated: "photos"
+        });
+    
+        const photos = user.related("photos");
+        res.send({ 
+            status: "success", 
+            data: { photos } });
+      } catch (err) {
+            res.status(404).send({
+                status: "fail",
+                data: "not available"
+        });
+      }
+    };
 
 
 // Get /:photoid
 const show = async (req, res) => {
     try {
-        const one_photo = await new models.Photo({ id: req.params.photoid }).fetch({ withRelated: ['albums', 'users']  });
-        res.send({ status: 'success', 
-            data: {one_photo} });
+      const photo = await new models.Photo({
+        id: req.params.id,
+        user_id: req.user.id
+      }).fetch({ withRelated: ["albums"] });
+      res.send({ 
+          status: "success", 
+          data: { photo } });
     } catch (err) {
         res.status(404).send({
-            status: 'fail',
-            data: 'no photos available'
-        });
+            status: "fail",
+            data: "not available"
+      });
     }
-};
+  };
 
 // POST /
 const store = async (req, res) => {
@@ -46,7 +56,8 @@ const store = async (req, res) => {
     };
 
     const valid = matchedData(req)
-
+    valid.user_id = req.user.id;
+    
     try {
         const photo = await new Photo(valid).save();
         console.log('created new photo', photo);
