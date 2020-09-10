@@ -24,16 +24,12 @@ const index = async (req, res) => {
       });
     }
 };
-// Get /
-
-
 
 // Get /:albumid
 const show = async (req, res) => {
     try {
       const album = await new models.Album({
-        id: req.params.id,
-        user_id: req.user.id
+        id: req.params.albumid
       }).fetch({ withRelated: ["photos"] });
       res.send({ 
           status: "success", 
@@ -103,18 +99,22 @@ const addAlbum = async (req, res) => {
         try {
         const photo = await Photo.fetchById(req.body.photo_id);
         const album = await Album.fetchById(req.params.albumid);
-        const photoToAlbum = await album.photos().attach([photo]);
+
+        if(photo.attributes.user_id === album.attributes.user_id){
+            const photoToAlbum = await album.photos().attach([photo]);
 
         res.status(201).send({
             status: 'success',
             data: photoToAlbum,
         });
-
-    } catch (err) {
-        res.status(500).send({
-        status: 'error',
-        message: 'error when trying to add photo to album'
-        });
+    } else {
+        res.status(401).send({
+            status: "fail",
+            data: "Sorry, you cant do that"
+            })
+        }
+    } catch (error) {
+        res.sendStatus(404);
         throw error;
     }
 }
