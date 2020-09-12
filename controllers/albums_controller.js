@@ -110,12 +110,12 @@ const addAlbum = async (req, res) => {
     } else {
         res.status(401).send({
             status: "fail",
-            data: "Sorry, you cant do that"
+            data: "Sorry, you don't own that album"
             })
         }
     } catch (error) {
-        res.sendStatus(404);
-        throw error;
+    res.sendStatus(500);
+    throw error;
     }
 }
 
