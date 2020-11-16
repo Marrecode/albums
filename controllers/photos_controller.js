@@ -21,6 +21,13 @@ const index = async (req, res) => {
                 data: "not available"
         });
       }
+      const userId = photo.get("user_id");
+      if (userId !== req.user.data.id) {
+          res.status(401).send({
+              status: 'fail',
+              message: 'you are not authorized to access photo with id',
+          })
+      }
     };
 
 
@@ -28,7 +35,8 @@ const index = async (req, res) => {
 const show = async (req, res) => {
     try {
       const photo = await new models.Photo({
-        id: req.params.photoid
+        id: req.params.photoid,
+        user_id: req.user.id
       }).fetch({ withRelated: ["albums"] });
       res.send({ 
           status: "success", 

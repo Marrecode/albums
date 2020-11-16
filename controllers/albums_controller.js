@@ -1,6 +1,6 @@
 const models=require('../models');
 const {matchedData, validationResult} = require('express-validator');
-const { Album, Photo } = require('../models');
+const { Album, Photo, User } = require('../models');
 
 
 
@@ -29,7 +29,8 @@ const index = async (req, res) => {
 const show = async (req, res) => {
     try {
       const album = await new models.Album({
-        id: req.params.albumid
+        id: req.params.albumid,
+        user_id: req.user.id
       }).fetch({ withRelated: ["photos"] });
       res.send({ 
           status: "success", 
@@ -39,6 +40,13 @@ const show = async (req, res) => {
             status: "fail",
             data: "resource not found"
       });
+    }
+    const userId = album.get("user_id");
+    if (userId !== req.user.data.id) {
+        res.status(401).send({
+            status: 'fail',
+            message: 'You are not authorized to access album with the id',
+        })
     }
   };
 

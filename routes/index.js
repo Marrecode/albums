@@ -7,9 +7,8 @@ router.get('/', (req, res) => {
   res.send({ status: 'success123' });
 });
 
-
-router.use(auth.basic);
 router.use('/register', require('./users'));
+router.use(auth.basic);
 router.use('/photos', require('./photos'));
 router.use('/albums', require('./albums'));
 router.use('/profile', require('./profile'));
